@@ -5,7 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+
+    AudioSource mys;
     float playerYpos;
+
+    private void Awake()
+    {
+        mys = GetComponent<AudioSource>();
+    }
     void Start()
     {
         playerYpos = transform.position.y;
@@ -18,19 +25,25 @@ public class PlayerController : MonoBehaviour
     }
     void ChangeSwithch()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (GameManager.instance.gameStarted == true)
         {
-            playerYpos = -playerYpos;
-            transform.position = new Vector3(transform.position.x, playerYpos, transform.position.z);
+            if (Input.GetMouseButtonDown(0))
+            {
+                playerYpos = -playerYpos;
+                transform.position = new Vector3(transform.position.x, playerYpos, transform.position.z);
+            }
         }
+       
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            mys.Play();
             GameManager.instance.UpdateLives();
             GameManager.instance.Shake();
+           
         }
     }
 }
